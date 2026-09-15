@@ -1,0 +1,86 @@
+body {
+    background-image: url('au_1.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.container {
+    background-color: rgba(18, 17, 17, 0.427);
+    /* black with 50% transparency */
+    padding: 20px;
+    width: 600px;
+    margin: 50px auto;
+    /* centers the box */
+    color: white;
+    /* text color */
+    border-radius: 10px;
+    /* rounded corners */
+}
+
+h1 {
+    text-align: center;
+
+}
+
+h3 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form label {
+    margin: 5px 0;
+}
+
+form input {
+    padding: 10px;
+    width: 200px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+input[type="submit"] {
+    background-color: #9a1212b2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 3px 1px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.nav-button {
+    background-color: #00000073;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: opacity 0.2s ease;
+}
+
+.nav-button:hover {
+    opacity: 0.85;
+}

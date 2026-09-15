@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <header>
+        <style>
+            h1 {
+                color: white; /* internal styling */
+            }
+        </style>
+        <h1 style="text-align: center;">Tadiwanashe</h1>
+        <h2 style="color: rgb(227, 218, 227);" style="text-align: center;" style=" font-weight: bold,"> Am a 🧑‍🎓</h2>
+        <!--inline styling-->
+        <nav>
+            <a href="#home"> HOME</a>
+            <a style="text-align: center;" href="#skill"> SKILL</a>
+            <a href="#company"> COMPANY</a>
+        </nav>
+    </header>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>first_lecture_my profile</title>
+    <link rel="stylesheet" href="style.css"> <!--linking the css file to the html file-->
+</head>
+<main>
+    <section>
+        <h2> About Me</h2>
+        <p> Am Straight</p>
+    </section>
+    <section>
+        <h2> Contact</h2>
+
+        <li> Email: <a href="tgchikiwa@gmail.com">tgchikiwa@gmail.com</a> </li>
+        <li> Phone: 0774856987</li>
+    </section>
+    <h2 style="margin-top: 30px;"> Get in Touch</h2>
+    <form style="margin-top: 30px;">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" pattern="[A-Za-z]{3,}" title="Please enter at least 3 letters"
+            required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+
+        <label for="number">Phone Number:</label>
+        <input type="tel" id="number" name="number" pattern="[0-9]{10}" title="Please enter exactly 10 digits" required>
+
+        <textarea id="message" name="message" rows="8" cols="40"></textarea>
+
+        <div>search</div>
+        <input type="text">
+        <p> </p>
+
+        <button type="submit">Send</button>
+    </form>
+
+</main>
+
+
+</body>
+
+</html>

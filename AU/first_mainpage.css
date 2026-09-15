@@ -1,0 +1,57 @@
+/* Main Page Styles */
+button {
+    background-color: rgb(16, 8, 8);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+button:hover {
+    background-color: rgb(223, 44, 44);
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+h1 {
+    color: rgb(223, 44, 44);
+    font-size: 50px;
+    font-family: Helvetica, sans-serif;
+    margin-top: 100px;
+    text-align: center;
+}
+
+h3 {
+    color: rgb(0, 0, 0);
+    font-size: 15px;
+    font-family: Helvetica, sans-serif;
+    margin-top: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: rgb(0, 0, 0);
+    font-size: 17px;
+    font-family: Helvetica, sans-serif;
+    margin-top: 20px;
+    text-align: center;
+}
+
+body {
+    background-image: url('Africau.jpg');
+    /* sets background image */
+    background-size: cover;
+    /* scales image to cover screen */
+    background-repeat: no-repeat;
+    /* prevents tiling */
+    background-position: center;
+    /* centers the image */
+
+}
