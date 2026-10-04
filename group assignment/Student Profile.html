@@ -1,0 +1,1009 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Student Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky navigation rail plus one content column on desktop; the rail collapses into a scrolling tab strip on phones. Palette: cool slate with a teal accent and marigold used only for highlights. */
+:root{
+  --bg:#EDF1F4; --surface:#FFFFFF; --sunk:#E3E9ED; --ink:#12202A; --ink2:#4B5C68; --line:#D2DBE1;
+  --accent:#0A6F8C; --accent-ink:#FFFFFF; --accent-soft:#D6EBF1;
+  --mark:#E3A400; --mark-soft:#FBEFC9;
+  --good:#1D7A4D; --good-soft:#D8EFE1; --warn:#9A5C00; --warn-soft:#F9E8C7; --bad:#B0303A; --bad-soft:#F7D9DB;
+  --c1:#0A6F8C; --c2:#BE5328; --c3:#5A7D1C; --c4:#7A4EA4; --c5:#AE3A69;
+  --font-d:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-b:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-m:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D151A; --surface:#141F27; --sunk:#1B2933; --ink:#E5EDF1; --ink2:#9EB0BB; --line:#25343F;
+    --accent:#4FB8D6; --accent-ink:#06222B; --accent-soft:#15313C;
+    --mark:#F0C04A; --mark-soft:#3A2F10;
+    --good:#5FCB93; --good-soft:#12301F; --warn:#E8B04A; --warn-soft:#38290E; --bad:#F08189; --bad-soft:#3A1A1D;
+    --c1:#4FB8D6; --c2:#F08A5D; --c3:#9DC653; --c4:#B993E0; --c5:#EE7FAE;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D151A; --surface:#141F27; --sunk:#1B2933; --ink:#E5EDF1; --ink2:#9EB0BB; --line:#25343F;
+  --accent:#4FB8D6; --accent-ink:#06222B; --accent-soft:#15313C;
+  --mark:#F0C04A; --mark-soft:#3A2F10;
+  --good:#5FCB93; --good-soft:#12301F; --warn:#E8B04A; --warn-soft:#38290E; --bad:#F08189; --bad-soft:#3A1A1D;
+  --c1:#4FB8D6; --c2:#F08A5D; --c3:#9DC653; --c4:#B993E0; --c5:#EE7FAE;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:var(--font-d);font-weight:650;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--font-m);font-variant-numeric:tabular-nums}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--ink2)}
+.small{font-size:13px}
+.lbl{font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+
+/* shell */
+.app{max-width:1340px;margin:0 auto;padding-inline:clamp(16px,3vw,32px);padding-block:20px 48px;display:grid;grid-template-columns:240px minmax(0,1fr);gap:28px;align-items:start}
+.rail{position:sticky;top:calc(20px + env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 14px;max-height:calc(100vh - 40px);overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 6px}
+.brand b{font-family:var(--font-d);font-size:21px;letter-spacing:-.02em}
+.brand svg{flex:none}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:9px 10px;cursor:pointer;color:var(--ink2);font-weight:550}
+.nav button:hover{background:var(--sunk);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.nav .badge{margin-left:auto;background:var(--mark);color:#241A00;border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;font-family:var(--font-m)}
+.rail-foot{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+.seg{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--sunk);border-radius:10px;padding:3px;gap:3px}
+.seg button{border:0;background:none;border-radius:8px;padding:6px 4px;cursor:pointer;font-weight:600;color:var(--ink2);font-size:12.5px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 0 0 1px var(--line)}
+.demo-tag{font-size:12px;color:var(--ink2);line-height:1.4;padding:0 4px}
+.linkbtn{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600;font-size:inherit;text-decoration:underline;text-underline-offset:3px}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--sunk);border:0;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
+.main{min-width:0;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between}
+.top h1{font-size:clamp(26px,3.4vw,38px);line-height:1.1}
+.top .term{font-size:13px;color:var(--ink2);margin-top:6px}
+.user{display:flex;align-items:center;gap:10px;font-size:13px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-d);font-weight:700;flex:none}
+.user b{display:block;font-size:14px}
+
+/* generic parts */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.card h2{font-size:18px;margin-bottom:2px}
+.card .sub{font-size:13px;color:var(--ink2);margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:start}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:18px;min-width:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:14px}
+.btn:hover:not(:disabled){border-color:var(--ink2)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent}
+.btn.primary:hover:not(:disabled){filter:brightness(1.07)}
+.btn.small{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:600;background:var(--sunk);color:var(--ink2);white-space:nowrap}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.gchip{display:inline-block;min-width:34px;text-align:center;border-radius:8px;padding:1px 8px;font-family:var(--font-m);font-weight:500;font-size:13px}
+.g-a{background:var(--good-soft);color:var(--good)}
+.g-b{background:var(--accent-soft);color:var(--accent)}
+.g-c{background:var(--warn-soft);color:var(--warn)}
+.g-f{background:var(--bad-soft);color:var(--bad)}
+.bar{position:relative;height:8px;border-radius:99px;background:var(--sunk);overflow:visible}
+.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--accent);min-width:2px}
+.bar>i.pend{background:repeating-linear-gradient(135deg,var(--mark) 0 4px,var(--mark-soft) 4px 8px)}
+.bar>i.good{background:var(--good)}.bar>i.warn{background:var(--warn)}.bar>i.bad{background:var(--bad)}
+.bar>u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:2px;text-decoration:none}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);text-align:left;font-weight:600;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.empty{padding:22px;text-align:center;color:var(--ink2);border:1px dashed var(--line);border-radius:12px}
+.note{font-size:13px;color:var(--ink2);background:var(--sunk);border-radius:10px;padding:10px 12px}
+.note.warn{background:var(--warn-soft);color:var(--warn)}
+.note.bad{background:var(--bad-soft);color:var(--bad)}
+.note.good{background:var(--good-soft);color:var(--good)}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:13px;font-weight:600}
+.field input,.field select,.field textarea{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%;min-width:0}
+.field textarea{min-height:96px;resize:vertical}
+.formrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:5px 13px;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink2)}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+/* dashboard */
+.hello{display:flex;flex-direction:column;gap:6px}
+.hello .next{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.hello .next .t{font-family:var(--font-m);font-size:13px}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));border-block:1px solid var(--line)}
+.strip>div{padding:16px 18px 16px 0;display:flex;flex-direction:column;gap:2px}
+.strip>div+div{padding-left:18px;border-left:1px solid var(--line)}
+.strip .v{font-family:var(--font-d);font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.strip .v small{font-size:15px;font-weight:600;color:var(--ink2);margin-left:4px}
+.strip .v.hl{box-shadow:inset 0 -10px 0 var(--mark-soft)}
+.list{display:flex;flex-direction:column}
+.list>div{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.list>div:last-child{border-bottom:0}
+.list .grow{flex:1;min-width:0}
+.list .when{font-family:var(--font-m);font-size:12.5px;text-align:right;white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--cc)}
+.chk{width:18px;height:18px;accent-color:var(--accent);flex:none}
+.done-t{text-decoration:line-through;color:var(--ink2)}
+.att{display:grid;grid-template-columns:62px 1fr 48px;gap:10px;align-items:center;padding:7px 0}
+.att .bar{height:7px}
+
+/* courses */
+.course{display:flex;flex-direction:column;gap:14px}
+.course header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.course header .code{font-family:var(--font-m);font-size:12.5px;color:var(--cc);font-weight:500}
+.course header h3{font-size:19px;line-height:1.2}
+.big{font-family:var(--font-d);font-size:36px;font-weight:700;line-height:1;text-align:right;letter-spacing:-.02em}
+.arow{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px}
+.arow .nm small{color:var(--ink2);margin-left:4px}
+.arow .val{font-family:var(--font-m);font-size:12.5px;text-align:right;white-space:nowrap}
+.plan{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.plan .row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;font-size:14px}
+.plan select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 8px}
+.plan .answer{font-family:var(--font-d);font-size:20px;font-weight:650}
+details.term{border-top:1px solid var(--line)}
+details.term summary{cursor:pointer;padding:12px 0;display:flex;gap:12px;align-items:center;font-weight:600;list-style:none}
+details.term summary::-webkit-details-marker{display:none}
+details.term summary .gp{margin-left:auto;font-family:var(--font-m)}
+.scale{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--ink2)}
+
+/* timetable */
+.tt-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.tt{display:grid;grid-template-columns:54px repeat(5,minmax(112px,1fr));min-width:660px}
+.tt .hd{padding:10px 8px;text-align:center;font-weight:650;font-size:13px;border-bottom:1px solid var(--line);background:var(--surface)}
+.tt .hd.today{color:var(--accent);box-shadow:inset 0 -3px 0 var(--accent)}
+.tt .tcol{position:relative;border-left:1px solid var(--line);height:var(--h);background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% var(--rh)}
+.tt .tcol.today{background-color:color-mix(in srgb,var(--accent) 5%,var(--surface))}
+.tt .hrs{position:relative;height:var(--h)}
+.tt .hrs span{position:absolute;right:8px;transform:translateY(-50%);font-family:var(--font-m);font-size:11px;color:var(--ink2)}
+.blk{position:absolute;left:4px;right:4px;border-radius:8px;border-left:4px solid var(--cc);background:color-mix(in srgb,var(--cc) 15%,var(--surface));padding:5px 7px;font-size:12px;line-height:1.3;overflow:hidden}
+.blk b{display:block;font-family:var(--font-m);font-weight:500;font-size:11.5px;color:var(--cc)}
+.blk span{color:var(--ink2)}
+
+/* fees */
+.stacked{height:14px;border-radius:99px;background:var(--sunk);display:flex;position:relative;overflow:visible}
+.stacked i{display:block;height:100%}
+.stacked i:first-child{border-radius:99px 0 0 99px;background:var(--accent)}
+.stacked i.pend{background:repeating-linear-gradient(135deg,var(--mark) 0 4px,var(--mark-soft) 4px 8px)}
+.stacked u{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink);text-decoration:none}
+.bal{font-family:var(--font-d);font-size:44px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--ink2)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+/* registration */
+.opt{display:flex;flex-direction:column;gap:8px;padding:14px 0;border-bottom:1px solid var(--line)}
+.opt:last-child{border-bottom:0}
+.opt .hd{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.opt .hd .nm{min-width:0}
+.opt .hd .nm b{font-family:var(--font-d);font-size:16.5px}
+.opt .meta{font-size:13px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:4px 14px}
+.opt.in{background:linear-gradient(90deg,var(--accent-soft),transparent 70%);margin-inline:-18px;padding-inline:18px}
+.meter{position:relative;height:10px;border-radius:99px;background:var(--sunk);margin:8px 0 22px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:var(--accent)}
+.meter u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);text-decoration:none}
+.meter u span{position:absolute;top:16px;left:50%;transform:translateX(-50%);font:11px var(--font-m);color:var(--ink2)}
+.sticky{position:sticky;top:calc(20px + env(safe-area-inset-top,0px))}
+
+/* announcements */
+.ann{border-bottom:1px solid var(--line);padding:14px 0}
+.ann:last-child{border-bottom:0}
+.ann button.h{all:unset;box-sizing:border-box;display:flex;gap:12px;align-items:flex-start;width:100%;cursor:pointer;border-radius:8px}
+.ann button.h:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.ann .tt2{flex:1;min-width:0}
+.ann .tt2 b{font-family:var(--font-d);font-size:16.5px;display:block}
+.ann .unr{width:9px;height:9px;border-radius:50%;background:var(--mark);flex:none;margin-top:8px}
+.ann .body{margin:10px 0 0 21px;max-width:68ch}
+
+/* gradebook */
+.gb input{width:70px;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:5px 7px;font-family:var(--font-m);font-size:13px;text-align:right}
+.gb input[aria-invalid="true"]{border-color:var(--bad);background:var(--bad-soft)}
+.gb tr.risk td:first-child{box-shadow:inset 3px 0 0 var(--bad)}
+.dist{display:flex;align-items:flex-end;gap:10px;height:120px;padding-top:6px}
+.dist div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;height:100%}
+.dist i{display:block;width:100%;border-radius:6px 6px 0 0;background:var(--accent);min-height:2px}
+.dist span{font:12px var(--font-m);color:var(--ink2)}
+.csvbox{width:100%;min-height:110px;font-family:var(--font-m);font-size:12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:10px}
+
+/* messages */
+.chat{display:grid;grid-template-columns:minmax(250px,320px) minmax(0,1fr);border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden;min-height:520px}
+.tlist{border-right:1px solid var(--line);display:flex;flex-direction:column;max-height:640px;overflow-y:auto}
+.tlist .grp{padding:12px 16px 6px}
+.th{all:unset;box-sizing:border-box;display:flex;gap:11px;align-items:flex-start;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--line);width:100%}
+.th:hover{background:var(--sunk)}
+.th:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.th[aria-current="true"]{background:var(--accent-soft)}
+.th .av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none;font:700 13px var(--font-d);background:color-mix(in srgb,var(--cc) 20%,var(--surface));color:var(--cc)}
+.th .tx{flex:1;min-width:0}
+.th .tx b{display:block;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th .tx .sb{font-size:12px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th .tx .pv{font-size:13px;color:var(--ink2);margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word}
+.th .mt{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none;font:11.5px var(--font-m);color:var(--ink2)}
+.th .ub{background:var(--mark);color:#241A00;border-radius:99px;font:700 11px var(--font-m);padding:1px 7px}
+.conv{display:flex;flex-direction:column;min-width:0}
+.conv .ch{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.conv .ch h2{font-size:17px}
+.msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:6px;max-height:440px;min-height:260px}
+.day{align-self:center;font-size:11.5px;color:var(--ink2);background:var(--sunk);border-radius:99px;padding:2px 12px;margin:8px 0}
+.bub{max-width:min(78%,520px);padding:9px 13px;border-radius:16px;background:var(--sunk);align-self:flex-start;border-bottom-left-radius:5px;overflow-wrap:anywhere;white-space:pre-wrap}
+.bub.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-left-radius:16px;border-bottom-right-radius:5px}
+.bub time{display:block;font:11px var(--font-m);opacity:.7;margin-top:3px}
+.composer{border-top:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.composer .row{display:flex;gap:10px;align-items:flex-end}
+.composer textarea{flex:1;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:9px 12px;resize:none;min-height:46px;max-height:140px}
+.composer .chips button{font-size:12.5px;padding:3px 11px}
+.only-m{display:none}
+.nomsg{margin:auto;text-align:center;color:var(--ink2);padding:24px}
+
+/* chart */
+.ax text{fill:var(--ink2);font:11px var(--font-m)}
+.ax .gl{stroke:var(--line);stroke-width:1}
+.trend .ln{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.trend .ln.dash{stroke-dasharray:5 5}
+.trend .pt{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.trend .pt.proj{fill:var(--surface);stroke:var(--accent);stroke-width:2.5}
+.trend text.v{fill:var(--ink);font:600 12px var(--font-m);text-anchor:middle}
+.trend text.x{text-anchor:middle}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:20;max-width:calc(100vw - 32px);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+
+@media (max-width:1020px){.cols{grid-template-columns:minmax(0,1fr)}.sticky{position:static}}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr);gap:16px;padding-block:12px 40px}
+  .rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;max-height:none;overflow:visible;border-radius:14px;padding:10px;gap:8px;flex-direction:row;flex-wrap:wrap;align-items:center}
+  .brand{padding:0}
+  .nav{order:3;flex-direction:row;overflow-x:auto;width:100%;gap:4px;padding-bottom:2px}
+  .nav button{width:auto;white-space:nowrap;padding:8px 12px;flex:none}
+  .rail-foot{margin:0 0 0 auto;flex-direction:row;align-items:center}
+  .demo-tag,.rail-foot .reset{display:none}
+  .strip>div,.strip>div+div{padding:14px 12px 14px 0;border-left:0}
+  .strip>div:nth-child(even){padding-left:14px;border-left:1px solid var(--line)}
+  .chat{grid-template-columns:minmax(0,1fr)}
+  .chat .tlist{border-right:0;max-height:none}
+  .chat.show-thread .tlist,.chat.show-list .conv{display:none}
+  .only-m{display:inline-flex}
+  .msgs{max-height:55vh}
+}
+@media (max-width:480px){
+  .arow{grid-template-columns:minmax(0,1fr) auto}
+  .arow .bar{grid-column:1/-1;order:3}
+  .big{font-size:30px}
+}
+</style>
+
+<div class="app" id="app">
+  <aside class="rail" aria-label="Main">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="7" width="16" height="16" rx="5" fill="none" stroke="var(--accent)" stroke-width="3"/><rect x="12" y="7" width="16" height="16" rx="5" fill="none" stroke="var(--mark)" stroke-width="3"/></svg>
+      <b>Student Profile</b>
+    </div>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+    <div class="rail-foot">
+      <div class="seg" role="group" aria-label="View as">
+        <button type="button" data-act="role" data-role="student" aria-pressed="true">Student</button>
+        <button type="button" data-act="role" data-role="staff" aria-pressed="false">Lecturer</button>
+        <button type="button" data-act="role" data-role="advisor" aria-pressed="false">Advisor</button>
+      </div>
+      <button type="button" class="iconbtn" id="themeBtn" data-act="theme" aria-label="Switch colour theme"></button>
+      <p class="demo-tag">Demo build with sample data. Changes stay in this browser.<br><button type="button" class="linkbtn reset" data-act="reset">Reset sample data</button></p>
+    </div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <div>
+        <h1 id="title"></h1>
+        <p class="term" id="term"></p>
+      </div>
+      <div class="user" id="user"></div>
+    </header>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+const $=(s,r)=>(r||document).querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DAYS=['Mon','Tue','Wed','Thu','Fri'];
+const base=new Date();base.setHours(0,0,0,0);
+const dOff=n=>{const d=new Date(base);d.setDate(d.getDate()+n);return d};
+const fmt=n=>dOff(n).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+const money=n=>'$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:(n%1?2:0),maximumFractionDigits:2});
+const rel=n=>n===0?'today':n===1?'tomorrow':n<0?(-n)+'d ago':'in '+n+' days';
+const hh=h=>{const H=Math.floor(h),m=Math.round((h-H)*60);return String(H).padStart(2,'0')+':'+String(m).padStart(2,'0')};
+const slotTxt=s=>DAYS[s.d-1]+' '+hh(s.s)+'–'+hh(s.e)+' '+s.room;
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const rng=seed=>{let s=seed>>>0;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296}};
+
+const SCALE=[[75,'A',4],[70,'B+',3.5],[60,'B',3],[55,'C+',2.5],[50,'C',2],[0,'F',0]];
+const grade=m=>SCALE.find(x=>Math.round(m)>=x[0]);
+const gcls=l=>l==='A'?'g-a':l==='F'?'g-f':l[0]==='B'?'g-b':'g-c';
+const chip=m=>{const g=grade(m);return '<span class="gchip '+gcls(g[1])+'">'+g[1]+'</span>'};
+
+const ic=n=>{const p={
+ home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+ book:'<path d="M4 5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M4 19V5"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+ wallet:'<rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/>',
+ mega:'<path d="M3 11v3l12 5V6L3 11z"/><path d="M18 9a4 4 0 010 6"/>',
+ clip:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/>',
+ grid:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
+ moon:'<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/>',
+ copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 012-2h10"/>',
+ lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ send:'<path d="M3 11l18-8-8 18-2-8z"/>',
+ chat:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',
+ back:'<path d="M15 5l-7 7 7 7"/>'
+};return '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(p[n]||'')+'</svg>'};
+
+/* ---------- sample data ---------- */
+const STUDENT={name:'Tendai Moyo',id:'CL-24-0100',programme:'BSc Computer Science',year:2};
+const STAFF={name:'Dr R. Ncube',dept:'Computing'};
+const TERM='Semester 1, 2026/27';
+const semStart=new Date(2026,7,10);
+const WEEK=clamp(Math.floor((base-semStart)/(7*864e5))+1,1,15);
+
+const CUR=[
+ {code:'CSC201',name:'Data Structures & Algorithms',cr:4,lect:'Dr R. Ncube',att:[14,13],
+  as:[{n:'Assignment 1',w:10,max:20,got:18,due:-24,type:'cw'},{n:'Test 1',w:15,max:40,got:33,due:-12,type:'cw'},{n:'Group project',w:15,max:100,got:null,due:9,type:'cw'},{n:'Final exam',w:60,max:100,got:null,due:58,type:'exam'}],
+  slots:[{d:1,s:8,e:10,room:'LT2',t:'Lecture'},{d:3,s:10,e:11,room:'Lab 3',t:'Lab'}]},
+ {code:'CSC203',name:'Database Systems',cr:4,lect:'Mrs P. Dube',att:[14,11],
+  as:[{n:'Lab report',w:10,max:20,got:16,due:-20,type:'cw'},{n:'Test 1',w:15,max:40,got:27,due:-9,type:'cw'},{n:'Design project',w:15,max:100,got:null,due:14,type:'cw'},{n:'Final exam',w:60,max:100,got:null,due:60,type:'exam'}],
+  slots:[{d:2,s:10,e:12,room:'LT1',t:'Lecture'},{d:4,s:14,e:16,room:'Lab 2',t:'Lab'}]},
+ {code:'MAT211',name:'Linear Algebra',cr:3,lect:'Prof T. Sibanda',att:[13,10],
+  as:[{n:'Quiz 1',w:10,max:10,got:9,due:-30,type:'cw'},{n:'Test 1',w:20,max:50,got:34,due:-11,type:'cw'},{n:'Assignment 2',w:10,max:25,got:null,due:5,type:'cw'},{n:'Final exam',w:60,max:100,got:null,due:63,type:'exam'}],
+  slots:[{d:1,s:10,e:12,room:'LT3',t:'Lecture'},{d:3,s:8,e:9,room:'LT3',t:'Tutorial'}]},
+ {code:'STA201',name:'Probability & Statistics',cr:3,lect:'Mr C. Mutasa',att:[7,7],
+  as:[{n:'Assignment 1',w:10,max:20,got:17,due:-22,type:'cw'},{n:'Test 1',w:20,max:50,got:36,due:-10,type:'cw'},{n:'Case study',w:10,max:50,got:null,due:11,type:'cw'},{n:'Final exam',w:60,max:100,got:null,due:65,type:'exam'}],
+  slots:[{d:5,s:8,e:11,room:'LT1',t:'Lecture'}]},
+ {code:'ENG202',name:'Technical Communication',cr:2,lect:'Ms L. Banda',att:[8,6],
+  as:[{n:'Presentation',w:20,max:20,got:15,due:-14,type:'cw'},{n:'Report',w:20,max:50,got:null,due:3,type:'cw'},{n:'Reflection',w:10,max:20,got:null,due:16,type:'cw'},{n:'Final exam',w:50,max:100,got:null,due:61,type:'exam'}],
+  slots:[{d:4,s:8,e:10,room:'B12',t:'Seminar'}]}
+];
+const HIST=[
+ {label:'2025/26 Semester 1',short:'Y1 S1',rows:[['CSC101','Introduction to Programming',4,78],['MAT101','Calculus I',3,66],['STA101','Introductory Statistics',3,71],['ENG101','Academic Writing',2,74],['PHY101','Physics for Computing',3,58]]},
+ {label:'2025/26 Semester 2',short:'Y1 S2',rows:[['CSC102','Programming II',4,81],['MAT102','Calculus II',3,62],['CSC104','Computer Organisation',4,69],['ICT110','Digital Literacy & Ethics',2,77],['MAT105','Discrete Mathematics',3,72]]}
+];
+const CAT=[
+ {code:'CSC202',name:'Operating Systems',cr:4,kind:'Core',lect:'Dr R. Ncube',pre:['CSC102'],seats:40,taken:31,slots:[{d:1,s:8,e:10,room:'LT2'},{d:3,s:8,e:10,room:'Lab 1'}]},
+ {code:'CSC204',name:'Software Engineering',cr:4,kind:'Core',lect:'Mrs P. Dube',pre:['CSC201'],seats:40,taken:36,slots:[{d:2,s:8,e:10,room:'LT2'},{d:4,s:10,e:12,room:'LT2'}]},
+ {code:'CSC206',name:'Computer Networks',cr:4,kind:'Core',lect:'Mr K. Phiri',pre:['CSC104'],seats:35,taken:20,slots:[{d:1,s:9,e:11,room:'LT3'},{d:4,s:14,e:16,room:'Lab 2'}]},
+ {code:'MAT212',name:'Numerical Methods',cr:3,kind:'Core',lect:'Prof T. Sibanda',pre:['MAT211'],seats:45,taken:30,slots:[{d:2,s:10,e:12,room:'LT3'},{d:5,s:9,e:10,room:'LT3'}]},
+ {code:'STA202',name:'Regression Analysis',cr:3,kind:'Elective',lect:'Mr C. Mutasa',pre:['STA201'],seats:30,taken:18,slots:[{d:3,s:10,e:12,room:'LT1'}]},
+ {code:'CSC230',name:'Web Development',cr:3,kind:'Elective',lect:'Ms R. Zhou',pre:[],seats:30,taken:29,slots:[{d:2,s:14,e:15,room:'LT1'},{d:5,s:14,e:16,room:'Lab 1'}]},
+ {code:'BUS210',name:'Entrepreneurship',cr:2,kind:'Elective',lect:'Mrs N. Chari',pre:[],seats:60,taken:41,slots:[{d:3,s:14,e:16,room:'LT2'}]},
+ {code:'CSC240',name:'Machine Learning Foundations',cr:3,kind:'Elective',lect:'Dr R. Ncube',pre:['MAT211','STA201'],seats:25,taken:25,slots:[{d:1,s:14,e:17,room:'Lab 3'}]}
+];
+const FEES=[['Tuition',1100],['Computing lab levy',80],['Library and ICT',60],['Student union',25],['Examination fee',90]];
+const TOTAL=FEES.reduce((a,f)=>a+f[1],0);
+const CLEAR=60;
+const INSTALMENTS=[{due:12,amt:190},{due:41,amt:190}];
+const ANN_BASE=[
+ {id:'a1',cat:'Finance',pin:true,from:'Bursar’s office',day:-1,unread:true,t:'Semester 2 registration needs 60% fee clearance',b:'Registration for Semester 2 is open for the next 20 days. You can register once at least 60% of your fees are verified. Payments you log in Student Profile stay pending until the bursar’s office confirms them.'},
+ {id:'a2',cat:'Exams',pin:false,from:'Examinations office',day:-1,unread:true,t:'Test timetable for weeks 9 and 10',b:'Second tests run in weeks 9 and 10 in your usual venues. Bring your student card. The full list is on the notice board outside the registry.'},
+ {id:'a3',cat:'Academic',pin:false,from:'Dr R. Ncube',day:-2,unread:true,t:'CSC201 group project brief is posted',b:'Groups of three. Pick your own topic from the list in the brief and submit one design document before the deadline. Questions go to the Wednesday lab session.'},
+ {id:'a4',cat:'Campus',pin:false,from:'Library',day:-3,unread:false,t:'Library open until 22:00 during test weeks',b:'Study rooms can be booked at the front desk. Silent floor rules apply after 18:00.'},
+ {id:'a5',cat:'Finance',pin:false,from:'Bursar’s office',day:-4,unread:true,t:'Next instalment reminder',b:'Students on the instalment plan have a payment due in the next two weeks. Your schedule is under Fees.'},
+ {id:'a6',cat:'Campus',pin:false,from:'Careers office',day:-6,unread:false,t:'Careers fair on Thursday in the Great Hall',b:'Twelve employers attend, including three software firms recruiting for vacation attachments. Bring printed CVs.'},
+ {id:'a7',cat:'Academic',pin:false,from:'Prof T. Sibanda',day:-8,unread:false,t:'MAT211 tutorial moves to LT3',b:'The Wednesday 08:00 tutorial now meets in LT3 because LT1 is closed for repairs.'},
+ {id:'a8',cat:'Campus',pin:false,from:'ICT services',day:-10,unread:false,t:'Wi-Fi maintenance on Saturday',b:'Campus Wi-Fi will be unavailable between 06:00 and 10:00 while access points are replaced.'}
+];
+const ROSTER=['Tendai Moyo','Rudo Chikwanha','Farai Ndlovu','Nyasha Mapfumo','Tafadzwa Gumbo','Chipo Sithole','Tinashe Mhlanga','Anesu Zvobgo','Kudzai Marufu','Blessing Mutema','Lindiwe Khumalo','Takudzwa Chigumba'].map((n,i)=>({name:n,id:'CL-24-'+String(100+i*37).padStart(4,'0')}));
+
+const NAV_S=[['dashboard','Dashboard','home'],['courses','Courses & grades','book'],['timetable','Timetable','calendar'],['registration','Registration','clip'],['fees','Fees','wallet'],['messages','Messages','chat'],['announcements','Announcements','mega']];
+const NAV_T=[['gradebook','Gradebook','grid'],['messages','Messages','chat'],['announce','Announcements','mega']];
+const NAV_A=[['messages','Messages','chat']];
+const ADVISOR={name:'Mrs G. Chirwa',title:'Academic advisor',dept:'Computing'};
+const TITLES={messages:'Messages',dashboard:'Dashboard',courses:'Courses & grades',timetable:'Timetable',registration:'Semester 2 registration',fees:'Fees',announcements:'Announcements',gradebook:'Gradebook',announce:'Announcements'};
+
+/* ---------- state ---------- */
+const KEY='campuslink-demo-1';
+function freshMarks(){
+  const m={};
+  CUR.forEach((c,ci)=>{
+    m[c.code]=ROSTER.map((st,i)=>{
+      const r=rng(ci*977+i*131+7);
+      return c.as.map(a=>{
+        if(a.got==null)return null;
+        if(i===0)return a.got;
+        const f=clamp(0.66+(r()-0.5)*0.62+(r()-0.5)*0.1,0.3,0.97);
+        return Math.round(a.max*f*2)/2;
+      });
+    });
+  });
+  return m;
+}
+function seedChat(){
+  const now=Date.now(),m=min=>now-min*60000;
+  return {
+    's0|CSC201':[
+      {w:'student',at:m(2*1440+190),text:'Good afternoon Dr Ncube. For the group project, can we pick a topic outside the list if it covers the same data structures?'},
+      {w:'staff',at:m(2*1440+60),text:'Afternoon Tendai. Yes, as long as you send me the topic and the structures it covers by Friday so I can approve it.'},
+      {w:'student',at:m(1440+30),text:'Thank you. We will send it on Thursday.'}],
+    's0|ADV':[
+      {w:'advisor',at:m(1440+200),text:'Hi Tendai, Semester 2 registration opens soon. Have a look at the catalogue and tell me if you want to talk through electives.'},
+      {w:'student',at:m(1440+20),text:'Thank you, ma’am. I am deciding between Web Development and Machine Learning.'},
+      {w:'advisor',at:m(300),text:'Machine Learning needs both MAT211 and STA201 and it is already full, so Web Development is the safer pick. Come and see me on Wednesday at 11:00 if you want to plan your whole load.'}],
+    's0|MAT211':[
+      {w:'staff',at:m(3*1440),text:'Tendai, please see me about your Test 1 script when you have a moment.'}],
+    's1|CSC201':[
+      {w:'student',at:m(180),text:'Good afternoon sir. May I have an extension on the group project? I have a lab report due the same day.'}],
+    's3|ADV':[
+      {w:'student',at:m(360),text:'Good afternoon. I would like to change one of my electives. Do you have a slot this week?'}]
+  };
+}
+function freshState(){
+  return {chat:seedChat(),seen:{'student:s0|CSC201':3,'staff:s0|CSC201':3,'staff:s1|CSC201':0,'advisor:s0|ADV':3},thread:null,chatPane:'list',
+    view:'dashboard',role:'student',theme:'system',annFilter:'All',openAnn:null,ttMode:'now',staffCourse:'CSC201',csv:'',
+    regIds:['CSC202','CSC204','MAT212','STA202'],waitlist:[],submitted:false,regRef:'',
+    payments:[{id:1,date:-51,amount:500,method:'Bank transfer',ref:'BT-88213',status:'Verified'},{id:2,date:-22,amount:475,method:'EcoCash',ref:'EC-5521',status:'Verified'}],
+    done:{},read:{},posted:[],target:{}};
+}
+let S=freshState(), marks=freshMarks();
+const PERSIST=['chat','seen','theme','regIds','waitlist','submitted','regRef','payments','done','read','posted','target'];
+function save(){try{const o={marks};PERSIST.forEach(k=>o[k]=S[k]);localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function load(){try{
+  const o=JSON.parse(localStorage.getItem(KEY)||'null');if(!o)return;
+  PERSIST.forEach(k=>{if(o[k]!==undefined)S[k]=o[k]});
+  if(o.marks)CUR.forEach(c=>{const a=o.marks[c.code];if(Array.isArray(a)&&a.length===ROSTER.length)marks[c.code]=a});
+}catch(e){}}
+load();
+try{const h=(location.hash||'').slice(1);if(TITLES[h]){S.view=h;if(h==='gradebook'||h==='announce')S.role='staff'}}catch(e){}
+
+/* ---------- calculations ---------- */
+function calc(c,row){
+  let earned=0,done=0,cwE=0,cwD=0,cwT=0;
+  c.as.forEach((a,j)=>{
+    if(a.type==='cw')cwT+=a.w;
+    const v=row[j];
+    if(v!=null&&v!==''){const p=a.w*v/a.max;earned+=p;done+=a.w;if(a.type==='cw'){cwE+=p;cwD+=a.w}}
+  });
+  return {earned,done,standing:done?earned/done*100:null,cwE,cwD,cwT};
+}
+const histTotals=()=>{let p=0,c=0;HIST.forEach(t=>t.rows.forEach(r=>{p+=r[2]*grade(r[3])[2];c+=r[2]}));return {pts:p,cr:c}};
+const termGpa=t=>{let p=0,c=0;t.rows.forEach(r=>{p+=r[2]*grade(r[3])[2];c+=r[2]});return p/c};
+function curProjection(){
+  let p=0,c=0;
+  CUR.forEach(cc=>{const k=calc(cc,marks[cc.code][0]);if(k.standing!=null){p+=cc.cr*grade(k.standing)[2];c+=cc.cr}});
+  return {pts:p,cr:c,gpa:c?p/c:null};
+}
+function paid(){
+  const ver=S.payments.filter(p=>p.status==='Verified').reduce((a,p)=>a+p.amount,0);
+  const pend=S.payments.filter(p=>p.status!=='Verified').reduce((a,p)=>a+p.amount,0);
+  return {ver,pend,pct:ver/TOTAL*100,bal:TOTAL-ver};
+}
+const overlap=(a,b)=>a.d===b.d&&a.s<b.e&&b.s<a.e;
+function clashes(c,others){
+  const out=[];
+  others.forEach(o=>c.slots.forEach(s1=>o.slots.forEach(s2=>{if(overlap(s1,s2))out.push({code:o.code,txt:DAYS[s1.d-1]+' '+hh(Math.max(s1.s,s2.s))+'–'+hh(Math.min(s1.e,s2.e))})})));
+  return out;
+}
+function prereqState(c){
+  let st='ok';const notes=[];
+  c.pre.forEach(code=>{
+    const h=HIST.flatMap(t=>t.rows).find(r=>r[0]===code);
+    if(h&&h[3]>=50){notes.push(code+' passed');return}
+    const cur=CUR.find(x=>x.code===code);
+    if(cur){const k=calc(cur,marks[code][0]);
+      if(k.standing!=null&&k.standing>=50){notes.push(code+' in progress at '+Math.round(k.standing)+'%');if(st==='ok')st='prov'}
+      else{notes.push(code+' in progress, below 50%');st='blocked'}
+    }else{notes.push(code+' not completed');st='blocked'}
+  });
+  return {st,notes};
+}
+function nextClass(){
+  const now=new Date(),mins=now.getHours()*60+now.getMinutes();
+  for(let i=0;i<8;i++){
+    const d=new Date(now);d.setDate(d.getDate()+i);
+    const wd=(d.getDay()+6)%7+1;if(wd>5)continue;
+    const list=[];
+    CUR.forEach((c,ci)=>c.slots.forEach(s=>{if(s.d===wd&&(i>0||s.e*60>mins))list.push({c,ci,s})}));
+    list.sort((a,b)=>a.s.s-b.s.s);
+    if(list.length)return Object.assign({in:i,mins:list[0].s.s*60-mins},list[0]);
+  }
+  return null;
+}
+function deadlines(){
+  const out=[];
+  CUR.forEach((c,ci)=>c.as.forEach((a,j)=>{if(marks[c.code][0][j]==null&&a.due!=null)out.push({c,ci,a,j,due:a.due})}));
+  return out.sort((x,y)=>x.due-y.due);
+}
+const isRead=a=>S.read[a.id]!==undefined?S.read[a.id]:!a.unread;
+const allAnn=()=>S.posted.concat(ANN_BASE);
+const unreadCount=()=>allAnn().filter(a=>!isRead(a)).length;
+
+/* ---------- shared renderers ---------- */
+function renderGrid(blocks,showToday){
+  const START=8,END=17,RH=56,H=(END-START)*RH;
+  const wd=(new Date().getDay()+6)%7+1;
+  let h='<div class="tt-scroll"><div class="tt" style="--rh:'+RH+'px;--h:'+H+'px">';
+  h+='<div class="hd"></div>'+DAYS.map((d,i)=>'<div class="hd'+(showToday&&wd===i+1?' today':'')+'">'+d+'</div>').join('');
+  h+='<div class="hrs">';
+  for(let t=START;t<=END;t++)h+='<span style="top:'+((t-START)*RH)+'px">'+hh(t)+'</span>';
+  h+='</div>';
+  for(let d=1;d<=5;d++){
+    h+='<div class="tcol'+(showToday&&wd===d?' today':'')+'">';
+    blocks.filter(b=>b.d===d).forEach(b=>{
+      h+='<div class="blk" style="--cc:var(--c'+(b.ci%5+1)+');top:'+((b.s-START)*RH+1)+'px;height:'+((b.e-b.s)*RH-3)+'px"><b>'+esc(b.code)+'</b>'+esc(b.room)+(b.t?' <span>· '+esc(b.t)+'</span>':'')+'<br><span>'+hh(b.s)+'–'+hh(b.e)+'</span></div>';
+    });
+    h+='</div>';
+  }
+  return h+'</div></div>';
+}
+const blocksOf=(list)=>list.flatMap((c,i)=>c.slots.map(s=>Object.assign({},s,{code:c.code,ci:i})));
+
+function trendSvg(pts){
+  const W=360,H=176,pl=34,pr=18,pt=22,pb=30,min=2,max=4;
+  const x=i=>pl+(pts.length>1?i*(W-pl-pr)/(pts.length-1):0);
+  const y=v=>pt+(max-clamp(v,min,max))/(max-min)*(H-pt-pb);
+  let s='<svg class="trend ax" viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Semester GPA trend: '+pts.map(p=>p.short+' '+p.gpa.toFixed(2)).join(', ')+'">';
+  [2,2.5,3,3.5,4].forEach(g=>{s+='<line class="gl" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y(g)+'" y2="'+y(g)+'"/>';if(g%1===0)s+='<text x="'+(pl-8)+'" y="'+(y(g)+4)+'" text-anchor="end">'+g.toFixed(1)+'</text>'});
+  const solid=pts.filter(p=>!p.proj);
+  if(solid.length>1)s+='<polyline class="ln" points="'+solid.map((p,i)=>x(i)+','+y(p.gpa)).join(' ')+'"/>';
+  const last=pts.length-1;
+  if(pts[last].proj&&last>0)s+='<line class="ln dash" x1="'+x(last-1)+'" y1="'+y(pts[last-1].gpa)+'" x2="'+x(last)+'" y2="'+y(pts[last].gpa)+'"/>';
+  pts.forEach((p,i)=>{
+    s+='<circle class="pt'+(p.proj?' proj':'')+'" cx="'+x(i)+'" cy="'+y(p.gpa)+'" r="5.5"/>';
+    s+='<text class="v" x="'+x(i)+'" y="'+(y(p.gpa)-12)+'">'+p.gpa.toFixed(2)+'</text>';
+    s+='<text class="x" x="'+x(i)+'" y="'+(H-8)+'">'+esc(p.short)+(p.proj?' (proj.)':'')+'</text>';
+  });
+  return s+'</svg>';
+}
+
+/* ---------- views ---------- */
+function vDashboard(){
+  const ht=histTotals(),cgpa=ht.pts/ht.cr,pr=curProjection(),p=paid();
+  const projC=pr.cr?(ht.pts+pr.pts)/(ht.cr+pr.cr):cgpa;
+  const nc=nextClass(),dl=deadlines().slice(0,6);
+  const hr=new Date().getHours();
+  const greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+  let nx='';
+  if(nc){
+    const when=nc.in===0?(nc.mins<=0?'in progress':nc.mins<60?'starts in '+nc.mins+' min':'starts in '+Math.floor(nc.mins/60)+'h '+(nc.mins%60)+'m'):nc.in===1?'tomorrow':DAYS[nc.s.d-1];
+    nx='<div class="next"><span class="lbl">Next class</span><b>'+esc(nc.c.name)+'</b><span class="t">'+hh(nc.s.s)+'–'+hh(nc.s.e)+' · '+esc(nc.s.room)+'</span><span class="pill acc">'+when+'</span></div>';
+  }
+  const pts=HIST.map(t=>({short:t.short,gpa:termGpa(t)}));
+  if(pr.gpa!=null)pts.push({short:'Y2 S1',gpa:pr.gpa,proj:true});
+  const today=(new Date().getDay()+6)%7+1;
+  const todays=[];CUR.forEach((c,ci)=>c.slots.forEach(s=>{if(s.d===today)todays.push({c,ci,s})}));todays.sort((a,b)=>a.s.s-b.s.s);
+  const ann=allAnn().slice().sort((a,b)=>(b.pin-a.pin)||(b.day-a.day)).slice(0,3);
+  return '<div class="stack">'+
+  '<div class="hello"><h2 style="font-size:22px">'+greet+', '+esc(STUDENT.name.split(' ')[0])+'.</h2>'+nx+'</div>'+
+  '<div class="strip">'+
+   '<div><span class="lbl">Cumulative GPA</span><span class="v hl">'+cgpa.toFixed(2)+'<small>/ 4.0</small></span><span class="small muted">'+ht.cr+' credits completed</span></div>'+
+   '<div><span class="lbl">Projected this semester</span><span class="v">'+(pr.gpa!=null?pr.gpa.toFixed(2):'n/a')+'<small>GPA</small></span><span class="small muted">Projected CGPA '+projC.toFixed(2)+'</span></div>'+
+   '<div><span class="lbl">Fee balance</span><span class="v">'+money(p.bal)+'</span><span class="small muted">'+Math.round(p.pct)+'% cleared'+(p.pend?' · '+money(p.pend)+' pending':'')+'</span></div>'+
+   '<div><span class="lbl">Semester progress</span><span class="v">Week '+WEEK+'<small>of 15</small></span><span class="small muted">Exams start in about '+(Math.min.apply(null,CUR.map(c=>c.as.find(a=>a.type==='exam').due)))+' days</span></div>'+
+  '</div>'+
+  '<div class="cols"><div class="stack">'+
+    '<section class="card"><h2>Coming up</h2><p class="sub">Assessments still open, soonest first. Tick what you have handed in.</p><div class="list">'+
+     dl.map(d=>{
+       const key=d.c.code+'-'+d.j,dn=!!S.done[key],isEx=d.a.type==='exam';
+       const tone=d.due<=3?'bad':d.due<=7?'warn':'';
+       return '<div style="--cc:var(--c'+(d.ci%5+1)+')"><span class="dot"></span>'+
+        (isEx?'<span style="width:18px;flex:none"></span>':'<input class="chk" type="checkbox" data-act="done" data-key="'+key+'" id="dn-'+key+'" aria-label="Handed in: '+esc(d.a.n)+'"'+(dn?' checked':'')+'>')+
+        '<label for="dn-'+key+'" class="grow'+(dn?' done-t':'')+'"><b>'+esc(d.a.n)+'</b> <span class="muted small">'+esc(d.c.code)+' · '+d.a.w+'% of grade</span></label>'+
+        '<span class="when"><span class="pill '+(dn?'good':tone)+'">'+(dn?'Handed in':rel(d.due))+'</span><br><span class="muted">'+fmt(d.due)+'</span></span></div>';
+     }).join('')+'</div></section>'+
+    '<section class="card"><h2>Today</h2><p class="sub">'+(todays.length?'Your classes for '+DAYS[today-1]+'.':'No classes scheduled today.')+'</p>'+
+     (todays.length?'<div class="list">'+todays.map(t=>'<div style="--cc:var(--c'+(t.ci%5+1)+')"><span class="dot"></span><div class="grow"><b>'+esc(t.c.name)+'</b><div class="muted small">'+esc(t.c.code)+' · '+esc(t.s.t)+' · '+esc(t.s.room)+'</div></div><span class="when">'+hh(t.s.s)+'–'+hh(t.s.e)+'</span></div>').join('')+'</div>':'<div class="empty">Nothing on today. Check Coming up for what is due.</div>')+'</section>'+
+  '</div><div class="stack">'+
+    '<section class="card"><h2>GPA by semester</h2><p class="sub">Dashed point assumes your exams match your current form.</p>'+trendSvg(pts)+'</section>'+
+    '<section class="card"><h2>Attendance</h2><p class="sub">The line marks the 75% requirement.</p>'+
+     CUR.map((c,ci)=>{const a=Math.round(c.att[1]/c.att[0]*100),tone=a<75?'bad':a<80?'warn':'good';
+       return '<div class="att" style="--cc:var(--c'+(ci%5+1)+')"><span class="mono small">'+c.code+'</span><div class="bar"><i class="'+tone+'" style="width:'+a+'%"></i><u style="left:75%"></u></div><span class="mono small" style="text-align:right">'+a+'%</span></div>'}).join('')+
+    '</section>'+
+    '<section class="card"><h2>Latest notices</h2><p class="sub"></p><div class="list">'+ann.map(a=>'<div><div class="grow"><b>'+esc(a.t)+'</b><div class="muted small">'+esc(a.from)+' · '+rel(a.day)+'</div></div>'+(!isRead(a)?'<span class="pill" style="background:var(--mark-soft);color:var(--ink)">New</span>':'')+'</div>').join('')+'</div><div style="margin-top:12px"><button type="button" class="btn small" data-act="nav" data-v="announcements">All announcements</button> <button type="button" class="btn small" data-act="nav" data-v="messages">'+ic('chat')+' Messages'+(chatUnread('student')?' ('+chatUnread('student')+' new)':'')+'</button></div></section>'+
+  '</div></div></div>';
+}
+
+function vCourses(){
+  const cards=CUR.map((c,ci)=>{
+    const row=marks[c.code][0],k=calc(c,row);
+    const exam=c.as.find(a=>a.type==='exam'),ej=c.as.indexOf(exam),examDone=row[ej]!=null;
+    const tgt=S.target[c.code]||'A',T=SCALE.find(x=>x[1]===tgt)[0];
+    const att=Math.round(c.att[1]/c.att[0]*100);
+    let ans='';
+    if(examDone){ans='Final mark <span class="answer">'+k.earned.toFixed(1)+'%</span> '+chip(k.earned)}
+    else{
+      const rem=k.cwT-k.cwD,frac=k.cwD?k.cwE/k.cwD:0.6,proj=k.cwE+rem*frac,need=(T-proj)/exam.w*100;
+      const best=proj+exam.w;
+      if(need<=0)ans='<span class="answer">Already within reach</span> <span class="muted small">any exam mark keeps you at '+tgt+' or better</span>';
+      else if(need>100)ans='<span class="answer">Out of reach</span> <span class="muted small">you would need '+Math.round(need)+'% in the exam. Best possible is '+chip(best).replace(/\s+/g,' ')+'</span>';
+      else ans='Aim for <span class="answer">'+Math.ceil(need)+'%</span> <span class="muted small">in the exam ('+Math.ceil(need)+' out of 100)</span>';
+    }
+    return '<article class="card course" style="--cc:var(--c'+(ci%5+1)+')">'+
+     '<header><div><span class="code">'+c.code+' · '+c.cr+' credits</span><h3>'+esc(c.name)+'</h3><div class="small muted">'+esc(c.lect)+'</div></div>'+
+       '<div><div class="big">'+(k.standing!=null?Math.round(k.standing)+'%':'–')+'</div><div style="text-align:right;margin-top:6px">'+(k.standing!=null?chip(k.standing):'')+'</div></div></header>'+
+     '<div class="stack" style="gap:10px">'+c.as.map((a,j)=>{
+        const v=row[j],has=v!=null;
+        return '<div class="arow"><span class="nm">'+esc(a.n)+'<small>'+a.w+'%</small></span><div class="bar" aria-hidden="true"><i style="width:'+(has?v/a.max*100:0)+'%;background:'+(has?'var(--cc)':'transparent')+'"></i></div><span class="val">'+(has?v+' / '+a.max:'due '+fmt(a.due))+'</span></div>';
+     }).join('')+'</div>'+
+     '<div class="plan"><div class="row"><span class="lbl">Exam planner</span><label for="tg-'+c.code+'" class="small muted">Target grade</label><select id="tg-'+c.code+'" data-act="target" data-code="'+c.code+'">'+['A','B+','B','C+','C'].map(g=>'<option'+(g===tgt?' selected':'')+'>'+g+'</option>').join('')+'</select></div>'+
+       '<div class="row">'+ans+'</div>'+(examDone?'':'<div class="small muted">Assumes the coursework still to be marked comes in at your current average.</div>')+'</div>'+
+     '<div class="att" style="padding:0"><span class="small muted">Attendance</span><div class="bar"><i class="'+(att<75?'bad':att<80?'warn':'good')+'" style="width:'+att+'%"></i><u style="left:75%"></u></div><span class="mono small" style="text-align:right">'+att+'%</span></div>'+
+    '</article>';
+  }).join('');
+  const ht=histTotals();
+  const terms=HIST.map(t=>'<details class="term"><summary><span>'+t.label+'</span><span class="gp">GPA '+termGpa(t).toFixed(2)+'</span></summary><div class="tbl"><table><thead><tr><th>Code</th><th>Course</th><th class="r">Credits</th><th class="r">Mark</th><th>Grade</th></tr></thead><tbody>'+
+     t.rows.map(r=>'<tr><td class="mono">'+r[0]+'</td><td>'+esc(r[1])+'</td><td class="r num">'+r[2]+'</td><td class="r num">'+r[3]+'</td><td>'+chip(r[3])+'</td></tr>').join('')+'</tbody></table></div></details>').join('');
+  return '<div class="stack">'+
+   '<div class="note">Grades combine every assessment marked so far. A mark entered by a lecturer shows here straight away. Try the Lecturer view and change a CSC201 mark.</div>'+
+   '<div class="grid2">'+cards+'</div>'+
+   '<section class="card"><h2>Transcript</h2><p class="sub">Cumulative GPA '+(ht.pts/ht.cr).toFixed(2)+' over '+ht.cr+' credits.</p>'+terms+
+   '<div class="scale" style="margin-top:12px"><span class="lbl">Scale</span>'+SCALE.map((s,i)=>'<span><b>'+s[1]+'</b> '+(i===0?'75+':s[0]===0?'below 50':s[0]+'–'+(SCALE[i-1][0]-1))+' = '+s[2].toFixed(1)+'</span>').join('')+'</div></section></div>';
+}
+
+function vTimetable(){
+  const draft=S.ttMode==='draft';
+  const list=draft?CAT.filter(c=>S.regIds.includes(c.code)):CUR;
+  const hours=list.reduce((a,c)=>a+c.slots.reduce((b,s)=>b+(s.e-s.s),0),0);
+  return '<div class="stack"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">'+
+   '<div class="chips" role="group" aria-label="Timetable"><button type="button" data-act="ttmode" data-m="now" aria-pressed="'+!draft+'">This semester</button><button type="button" data-act="ttmode" data-m="draft" aria-pressed="'+draft+'">Semester 2 draft</button></div>'+
+   '<span class="small muted">'+list.length+' courses · '+hours+' contact hours a week</span></div>'+
+   (list.length?renderGrid(blocksOf(list),!draft):'<div class="empty">No courses chosen yet. Add courses under Registration and they appear here.</div>')+
+   '<div class="legend">'+list.map((c,i)=>'<span><i style="background:var(--c'+(i%5+1)+')"></i>'+c.code+' '+esc(c.name)+'</span>').join('')+'</div>'+
+   (draft?'<div class="note">This draft updates as you add or remove courses on the Registration page, and it never lets two courses overlap.</div>':'')+'</div>';
+}
+
+function vRegistration(){
+  const p=paid(),cleared=p.pct>=CLEAR;
+  const regd=CAT.filter(c=>S.regIds.includes(c.code));
+  const cr=regd.reduce((a,c)=>a+c.cr,0);
+  const ok=cr>=12&&cr<=20&&cleared;
+  const opts=CAT.map(c=>{
+    const inReg=S.regIds.includes(c.code),pr=prereqState(c);
+    const others=regd.filter(o=>o.code!==c.code),cl=clashes(c,others);
+    const left=c.seats-c.taken,full=left<=0,wl=S.waitlist.includes(c.code);
+    let btn='',why='';
+    if(inReg){btn='<button type="button" class="btn small" data-act="reg-remove" data-code="'+c.code+'"'+(S.submitted?' disabled':'')+'>Remove</button>'}
+    else if(S.submitted){btn='<button type="button" class="btn small" disabled>Locked</button>'}
+    else if(!cleared){btn='<button type="button" class="btn small" disabled>'+ic('lock')+' Fee hold</button>';why='Registration is on hold until '+CLEAR+'% of fees are cleared.'}
+    else if(pr.st==='blocked'){btn='<button type="button" class="btn small" disabled>Not eligible</button>';why='Prerequisite not met.'}
+    else if(full){btn='<button type="button" class="btn small" data-act="reg-wait" data-code="'+c.code+'">'+(wl?'Leave waitlist':'Join waitlist')+'</button>'}
+    else if(cl.length){btn='<button type="button" class="btn small" disabled>Clash</button>';why='Overlaps '+cl[0].code+' on '+cl[0].txt+'.'}
+    else if(cr+c.cr>20){btn='<button type="button" class="btn small" disabled>Over 20 credits</button>'}
+    else btn='<button type="button" class="btn small primary" data-act="reg-add" data-code="'+c.code+'">'+ic('plus')+' Add</button>';
+    const seatPill=full?'<span class="pill bad">Full</span>':left<=5?'<span class="pill warn">'+left+' seats left</span>':'<span class="pill">'+left+' seats</span>';
+    return '<div class="opt'+(inReg?' in':'')+'"><div class="hd"><div class="nm"><span class="mono small muted">'+c.code+'</span> · <span class="small muted">'+c.cr+' credits · '+c.kind+'</span><br><b>'+esc(c.name)+'</b></div><div style="flex:none">'+btn+'</div></div>'+
+      '<div class="meta"><span>'+esc(c.lect)+'</span><span>'+c.slots.map(slotTxt).join(' · ')+'</span></div>'+
+      '<div class="chips" style="gap:6px">'+seatPill+(pr.notes.length?'<span class="pill '+(pr.st==='blocked'?'bad':pr.st==='prov'?'warn':'good')+'">'+(pr.st==='prov'?'Provisional: ':'')+esc(pr.notes.join(', '))+'</span>':'<span class="pill good">No prerequisites</span>')+(wl?'<span class="pill acc">On waitlist</span>':'')+'</div>'+
+      (why?'<div class="small" style="color:var(--bad)">'+esc(why)+'</div>':'')+'</div>';
+  }).join('');
+  return '<div class="stack"><div class="cols"><section class="card"><h2>Course catalogue</h2><p class="sub">Eight courses open for Semester 2. Clashes, prerequisites and your credit limit are checked as you add.</p>'+opts+'</section>'+
+   '<div class="stack sticky">'+
+   '<section class="card"><h2>Your registration</h2><p class="sub">12 to 20 credits needed.</p>'+
+     '<div style="display:flex;justify-content:space-between;align-items:baseline"><span class="bal" style="font-size:36px">'+cr+'</span><span class="muted small">credits chosen</span></div>'+
+     '<div class="meter" aria-hidden="true"><i style="width:'+clamp(cr/24*100,0,100)+'%"></i><u style="left:'+(12/24*100)+'%"><span>12</span></u><u style="left:'+(20/24*100)+'%"><span>20</span></u></div>'+
+     (regd.length?'<div class="list">'+regd.map(c=>'<div><div class="grow"><b>'+esc(c.name)+'</b><div class="muted small mono">'+c.code+'</div></div><span class="mono small">'+c.cr+' cr</span></div>').join('')+'</div>':'<div class="empty">Nothing chosen yet.</div>')+
+     '<div style="margin-top:14px;display:flex;flex-direction:column;gap:10px">'+
+     (cleared?'<div class="note good">Fees cleared to '+Math.round(p.pct)+'%. You can register.</div>':'<div class="note bad">Fees are '+Math.round(p.pct)+'% cleared. Registration needs '+CLEAR+'%. Pay '+money(Math.ceil(TOTAL*CLEAR/100-p.ver))+' more.</div>')+
+     (cr<12?'<div class="note warn">Add at least '+(12-cr)+' more credits to submit.</div>':'')+
+     (S.submitted?'<div class="note good">Submitted. Reference <b class="mono">'+esc(S.regRef)+'</b>. Awaiting department approval.</div><button type="button" class="btn" data-act="reg-reopen">Reopen to edit</button>':'<button type="button" class="btn primary" data-act="reg-submit"'+(ok?'':' disabled')+'>'+ic('send')+' Submit registration</button>')+
+     '</div></section></div></div>'+
+   '<section class="card"><h2>Draft timetable</h2><p class="sub">Your Semester 2 week with the courses chosen above.</p>'+(regd.length?renderGrid(blocksOf(regd),false):'<div class="empty">Add a course to see it placed in your week.</div>')+'</section></div>';
+}
+
+function vFees(){
+  const p=paid();
+  const vw=p.ver/TOTAL*100,pw=Math.min(100-vw,p.pend/TOTAL*100);
+  const rows=S.payments.slice().sort((a,b)=>b.date-a.date);
+  let remaining=p.bal;
+  const nextI=INSTALMENTS.filter((_,i)=>i>=0);
+  return '<div class="stack"><div class="cols"><div class="stack">'+
+   '<section class="card"><span class="lbl">Outstanding balance</span><div class="bal" style="margin:6px 0 14px">'+money(p.bal)+'</div>'+
+    '<div class="stacked" role="img" aria-label="'+Math.round(p.pct)+'% of fees verified, '+Math.round(CLEAR)+'% needed to register"><i style="width:'+vw+'%"></i><i class="pend" style="width:'+pw+'%"></i><u style="left:'+CLEAR+'%"></u></div>'+
+    '<div class="legend" style="margin-top:12px"><span><i style="background:var(--accent)"></i>Verified '+money(p.ver)+'</span><span><i style="background:var(--mark)"></i>Pending '+money(p.pend)+'</span><span><i style="background:var(--ink)"></i>Registration threshold '+CLEAR+'%</span></div></section>'+
+   '<section class="card"><h2>Payments</h2><p class="sub">Verified payments reduce your balance. Pending ones wait for the bursar’s office.</p>'+
+    (rows.length?'<div class="tbl"><table><thead><tr><th>Date</th><th>Method</th><th>Reference</th><th class="r">Amount</th><th>Status</th></tr></thead><tbody>'+rows.map(r=>'<tr><td>'+fmt(r.date)+'</td><td>'+esc(r.method)+'</td><td class="mono small">'+esc(r.ref||'none')+'</td><td class="r num">'+money(r.amount)+'</td><td><span class="pill '+(r.status==='Verified'?'good':'warn')+'">'+r.status+'</span></td></tr>').join('')+'</tbody></table></div>':'<div class="empty">No payments logged yet.</div>')+'</section>'+
+   '<section class="card"><h2>Log a payment</h2><p class="sub">Record a payment you have made so the bursar can match it. This demo only adds an entry and never moves money.</p>'+
+    '<form data-form="pay" style="display:flex;flex-direction:column;gap:12px"><div class="formrow">'+
+     '<div class="field"><label for="pa">Amount (USD)</label><input id="pa" name="amount" type="number" inputmode="decimal" min="1" step="0.01" max="'+Math.max(0,TOTAL-p.ver-p.pend)+'" required></div>'+
+     '<div class="field"><label for="pm">Method</label><select id="pm" name="method"><option>EcoCash</option><option>Bank transfer</option><option>Card at bursar</option><option>Cash at bursar</option></select></div>'+
+     '<div class="field"><label for="pr">Reference</label><input id="pr" name="ref" type="text" maxlength="40" placeholder="Transaction reference"></div></div>'+
+     '<div><button type="submit" class="btn primary">'+ic('plus')+' Add to ledger</button></div></form></section>'+
+  '</div><div class="stack">'+
+   '<section class="card"><h2>Statement</h2><p class="sub">'+TERM+' · '+esc(STUDENT.id)+'</p><div class="tbl"><table><tbody>'+FEES.map(f=>'<tr><td>'+f[0]+'</td><td class="r num">'+money(f[1])+'</td></tr>').join('')+'<tr><td><b>Total charged</b></td><td class="r num"><b>'+money(TOTAL)+'</b></td></tr></tbody></table></div></section>'+
+   '<section class="card"><h2>Instalment plan</h2><p class="sub">Remaining balance split in two.</p><div class="list">'+
+    nextI.map((it,i)=>{const amt=Math.min(it.amt,Math.max(0,remaining));remaining-=amt;return '<div><div class="grow"><b>Instalment '+(i+1)+'</b><div class="muted small">Due '+fmt(it.due)+'</div></div><span class="num">'+money(amt)+'</span><span class="pill '+(amt===0?'good':it.due<=14?'warn':'')+'">'+(amt===0?'Covered':rel(it.due))+'</span></div>'}).join('')+'</div></section>'+
+  '</div></div></div>';
+}
+
+function vAnnouncements(){
+  const f=S.annFilter,list=allAnn().slice().sort((a,b)=>(b.pin-a.pin)||(b.day-a.day)).filter(a=>f==='All'||(f==='Unread'?!isRead(a):a.cat===f));
+  const n=unreadCount();
+  return '<div class="stack"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><div class="chips" role="group" aria-label="Filter">'+
+   ['All','Unread','Academic','Finance','Exams','Campus'].map(x=>'<button type="button" data-act="annf" data-f="'+x+'" aria-pressed="'+(f===x)+'">'+x+(x==='Unread'&&n?' ('+n+')':'')+'</button>').join('')+'</div>'+
+   '<button type="button" class="btn small" data-act="readall"'+(n?'':' disabled')+'>Mark all as read</button></div>'+
+   '<section class="card">'+(list.length?list.map(a=>{const open=S.openAnn===a.id;
+     return '<div class="ann"><button type="button" class="h" data-act="annopen" data-id="'+a.id+'" aria-expanded="'+open+'">'+(!isRead(a)?'<span class="unr" aria-label="Unread"></span>':'<span style="width:9px;flex:none"></span>')+
+      '<span class="tt2"><b>'+esc(a.t)+'</b><span class="muted small">'+esc(a.from)+' · '+rel(a.day)+'</span></span><span style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">'+(a.pin?'<span class="pill" style="background:var(--mark-soft);color:var(--ink)">Pinned</span>':'')+'<span class="pill">'+a.cat+'</span></span></button>'+
+      (open?'<p class="body">'+esc(a.b)+'</p>':'')+'</div>'}).join(''):'<div class="empty">Nothing here. Try a different filter.</div>')+'</section></div>';
+}
+
+function vGradebook(){
+  const c=CUR.find(x=>x.code===S.staffCourse)||CUR[0],ci=CUR.indexOf(c);
+  return '<div class="stack"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between">'+
+   '<div class="field" style="min-width:min(100%,280px)"><label for="sc">Course</label><select id="sc" data-act="staffcourse">'+CUR.map(x=>'<option value="'+x.code+'"'+(x.code===c.code?' selected':'')+'>'+x.code+' · '+esc(x.name)+'</option>').join('')+'</select></div>'+
+   '<button type="button" class="btn" data-act="csv">'+ic('copy')+' Copy as CSV</button></div>'+
+   '<div id="csvarea">'+csvBox()+'</div>'+
+   '<div class="cols"><section class="card gb"><h2>Marks</h2><p class="sub">Enter raw marks. Weighted standing updates as you type. Tendai Moyo is the student whose page you see in the Student view.</p><div class="tbl"><table><thead><tr><th>Student</th>'+
+    c.as.map(a=>'<th class="r">'+esc(a.n)+'<br><span style="text-transform:none;letter-spacing:0;font-weight:500">/'+a.max+' · '+a.w+'%</span></th>').join('')+'<th class="r">Standing</th></tr></thead><tbody>'+
+    ROSTER.map((st,i)=>'<tr id="r-'+i+'"><td><b>'+esc(st.name)+'</b><div class="mono small muted">'+st.id+'</div></td>'+
+      c.as.map((a,j)=>{const v=marks[c.code][i][j];return '<td class="r"><input type="number" inputmode="decimal" min="0" max="'+a.max+'" step="0.5" value="'+(v==null?'':v)+'" data-mark data-s="'+i+'" data-j="'+j+'" aria-label="'+esc(st.name+', '+a.n)+'"></td>'}).join('')+
+      '<td class="r" id="sc-'+i+'"></td></tr>').join('')+'</tbody></table></div></section>'+
+   '<div class="stack"><section class="card" id="stats"></section></div></div></div>';
+}
+function csvBox(){return S.csv?'<div class="note" style="margin-bottom:8px">Clipboard was blocked here. Select the text below and copy it.</div><textarea class="csvbox" id="csvta" readonly aria-label="CSV export">'+esc(S.csv)+'</textarea>':''}
+function rowCells(c,i){
+  const k=calc(c,marks[c.code][i]);
+  if(k.standing==null)return '<span class="muted">No marks</span>';
+  return '<span class="num"><b>'+k.standing.toFixed(1)+'%</b></span> '+chip(k.standing)+'<div class="small muted">of '+k.done+'% assessed</div>';
+}
+function statsHtml(c){
+  const st=ROSTER.map((_,i)=>calc(c,marks[c.code][i]).standing).filter(v=>v!=null);
+  if(!st.length)return '<h2>Class summary</h2><div class="empty" style="margin-top:12px">Enter some marks to see statistics.</div>';
+  const mean=st.reduce((a,b)=>a+b,0)/st.length,pass=st.filter(v=>v>=50).length,risk=st.filter(v=>v<50).length;
+  const buckets=['A','B+','B','C+','C','F'].map(l=>({l,n:st.filter(v=>grade(v)[1]===l).length}));
+  const mx=Math.max.apply(null,buckets.map(b=>b.n).concat([1]));
+  return '<h2>Class summary</h2><p class="sub">Based on work marked so far.</p>'+
+   '<div class="formrow" style="margin-bottom:14px"><div><div class="lbl">Mean</div><div class="bal" style="font-size:30px">'+mean.toFixed(1)+'%</div></div><div><div class="lbl">Pass rate</div><div class="bal" style="font-size:30px">'+Math.round(pass/st.length*100)+'%</div></div></div>'+
+   '<div class="dist" role="img" aria-label="Grade distribution">'+buckets.map(b=>'<div><span>'+b.n+'</span><i style="height:'+(b.n/mx*80)+'px;'+(b.l==='F'?'background:var(--bad)':'')+'"></i><span>'+b.l+'</span></div>').join('')+'</div>'+
+   (risk?'<div class="note bad" style="margin-top:14px">'+risk+' student'+(risk>1?'s are':' is')+' below 50% and flagged in the table.</div>':'<div class="note good" style="margin-top:14px">Nobody is below 50% right now.</div>');
+}
+function staffRefresh(){
+  const c=CUR.find(x=>x.code===S.staffCourse);if(!c)return;
+  ROSTER.forEach((_,i)=>{
+    const el=$('#sc-'+i),row=$('#r-'+i);if(!el)return;
+    el.innerHTML=rowCells(c,i);
+    const k=calc(c,marks[c.code][i]);row.classList.toggle('risk',k.standing!=null&&k.standing<50);
+  });
+  const s=$('#stats');if(s)s.innerHTML=statsHtml(c);
+}
+function buildCsv(){
+  const c=CUR.find(x=>x.code===S.staffCourse);
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const lines=[['Student ID','Name'].concat(c.as.map(a=>a.n+' (/'+a.max+')'),['Standing %','Grade']).map(q).join(',')];
+  ROSTER.forEach((st,i)=>{const k=calc(c,marks[c.code][i]);
+    lines.push([st.id,st.name].concat(marks[c.code][i].map(v=>v==null?'':v),[k.standing==null?'':k.standing.toFixed(1),k.standing==null?'':grade(k.standing)[1]]).map(q).join(','));});
+  return lines.join('\n');
+}
+
+function vAnnounce(){
+  const mine=S.posted;
+  return '<div class="cols"><section class="card"><h2>Post an announcement</h2><p class="sub">Students see it under Announcements the moment you post.</p>'+
+   '<form data-form="post" style="display:flex;flex-direction:column;gap:12px">'+
+   '<div class="field"><label for="at">Title</label><input id="at" name="title" type="text" maxlength="90" required></div>'+
+   '<div class="formrow"><div class="field"><label for="ac">Category</label><select id="ac" name="cat"><option>Academic</option><option>Exams</option><option>Campus</option></select></div>'+
+   '<div class="field"><label for="au">Audience</label><select id="au" name="aud"><option value="">All my students</option>'+CUR.map(c=>'<option value="'+c.code+'">'+c.code+' class</option>').join('')+'</select></div></div>'+
+   '<div class="field"><label for="ab">Message</label><textarea id="ab" name="body" maxlength="600" required></textarea></div>'+
+   '<div><button type="submit" class="btn primary">'+ic('send')+' Post</button></div></form></section>'+
+   '<section class="card"><h2>Posted by you</h2><p class="sub"></p>'+(mine.length?'<div class="list">'+mine.map(a=>'<div><div class="grow"><b>'+esc(a.t)+'</b><div class="muted small">'+esc(a.aud||'All students')+' · '+a.cat+'</div></div><span class="pill">'+rel(a.day)+'</span></div>').join('')+'</div>':'<div class="empty">Nothing posted yet.</div>')+'</section></div>';
+}
+
+/* ---------- messages ---------- */
+function threadsFor(role){
+  if(role==='student'){
+    return CUR.map((c,ci)=>({id:'s0|'+c.code,title:c.lect,sub:c.code+' · '+c.name,kind:'Lecturer',ci}))
+      .concat([{id:'s0|ADV',title:ADVISOR.name,sub:ADVISOR.title,kind:'Advisor',ci:5}]);
+  }
+  if(role==='staff')return ROSTER.map((st,i)=>({id:'s'+i+'|CSC201',title:st.name,sub:st.id+' · CSC201',kind:'Student',ci:0}));
+  return ROSTER.map((st,i)=>({id:'s'+i+'|ADV',title:st.name,sub:st.id,kind:'Student',ci:5}));
+}
+const seenKey=(role,id)=>role+':'+id;
+function threadUnread(role,id){
+  const list=S.chat[id]||[],seen=S.seen[seenKey(role,id)]||0;
+  return list.slice(seen).filter(m=>m.w!==role).length;
+}
+const chatUnread=role=>threadsFor(role).reduce((a,t)=>a+threadUnread(role,t.id),0);
+const sameDay=(a,b)=>new Date(a).toDateString()===new Date(b).toDateString();
+function clock(at){return new Date(at).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+function dayLabel(at){
+  const now=Date.now();
+  if(sameDay(at,now))return 'Today';
+  if(sameDay(at,now-864e5))return 'Yesterday';
+  return new Date(at).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+}
+function shortTime(at){return sameDay(at,Date.now())?clock(at):dayLabel(at)==='Yesterday'?'Yesterday':new Date(at).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+const initials=n=>n.replace(/^(Dr|Mrs|Mr|Ms|Prof)\s+/,'').split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();
+const QUICK={
+  'student|Lecturer':['Ask about a mark','Request an extension','Ask for office hours'],
+  'student|Advisor':['Request a meeting','Ask about electives','Talk about my workload'],
+  'staff|Student':['Please see me in office hours','Extension approved','Send me your draft'],
+  'advisor|Student':['Can you meet Wednesday at 11:00?','Please check your fee balance','Well done on your results']
+};
+const QTEXT={
+  'Ask about a mark':'Good day. I would like to understand how my last mark was calculated. When could we go through it?',
+  'Request an extension':'Good day. I would like to ask for a short extension on the next assessment. The reason is: ',
+  'Ask for office hours':'Good day. Which office hours are open this week so I can ask about the course?',
+  'Request a meeting':'Good day. May I book a meeting with you this week to talk about my studies?',
+  'Ask about electives':'Good day. I would like advice on which Semester 2 electives suit my programme.',
+  'Talk about my workload':'Good day. I am finding this semester’s workload heavy and would like your advice.',
+  'Please see me in office hours':'Please see me in office hours this week so we can go through this together.',
+  'Extension approved':'Your extension is approved. Please submit by the new date we agreed.',
+  'Send me your draft':'Please send me your draft before the deadline so I can give early feedback.',
+  'Can you meet Wednesday at 11:00?':'Can you meet me on Wednesday at 11:00 in my office? Please confirm.',
+  'Please check your fee balance':'Please check your fee balance. Registration needs 60% of fees cleared.',
+  'Well done on your results':'Well done on your results this semester. Keep it up.'
+};
+function vMessages(){
+  const role=S.role,ths=threadsFor(role);
+  if(!ths.some(t=>t.id===S.thread)){
+    const firstUnread=ths.find(t=>threadUnread(role,t.id)>0);
+    S.thread=(firstUnread||ths[0]).id;
+  }
+  const t=ths.find(x=>x.id===S.thread);
+  const desktop=window.matchMedia&&matchMedia('(min-width: 861px)').matches;
+  const showing=desktop||S.chatPane==='thread';
+  const list=S.chat[t.id]||[];
+  if(showing&&(S.seen[seenKey(role,t.id)]||0)!==list.length){S.seen[seenKey(role,t.id)]=list.length;save()}
+  const row=th=>{
+    const l=S.chat[th.id]||[],last=l[l.length-1],un=threadUnread(role,th.id);
+    return '<button type="button" class="th" style="--cc:var(--c'+(th.ci%5+1)+')" data-act="thread" data-id="'+th.id+'"'+(th.id===t.id?' aria-current="true"':'')+'>'+
+      '<span class="av" aria-hidden="true">'+initials(th.title)+'</span>'+
+      '<span class="tx"><b>'+esc(th.title)+'</b><span class="sb">'+esc(th.sub)+'</span>'+(last?'<span class="pv">'+(last.w===role?'You: ':'')+esc(last.text)+'</span>':'<span class="pv">No messages yet</span>')+'</span>'+
+      '<span class="mt">'+(last?shortTime(last.at):'')+(un?'<span class="ub" aria-label="'+un+' unread">'+un+'</span>':'')+'</span></button>';
+  };
+  let groups='';
+  if(role==='student'){
+    groups='<div class="grp lbl">Your lecturers</div>'+ths.filter(x=>x.kind==='Lecturer').map(row).join('')+'<div class="grp lbl">Your advisor</div>'+ths.filter(x=>x.kind==='Advisor').map(row).join('');
+  }else{
+    groups='<div class="grp lbl">'+(role==='staff'?'Students in CSC201':'Your advisees')+'</div>'+ths.slice().sort((a,b)=>((S.chat[b.id]||[]).length?(S.chat[b.id].slice(-1)[0].at):0)-((S.chat[a.id]||[]).length?(S.chat[a.id].slice(-1)[0].at):0)).map(row).join('');
+  }
+  let body='',prev=0;
+  list.forEach(m=>{
+    if(!prev||!sameDay(prev,m.at))body+='<div class="day">'+dayLabel(m.at)+'</div>';
+    prev=m.at;
+    body+='<div class="bub'+(m.w===role?' me':'')+'">'+esc(m.text)+'<time datetime="'+new Date(m.at).toISOString()+'">'+(m.w===role?'You':esc(t.title))+' · '+clock(m.at)+'</time></div>';
+  });
+  if(!list.length)body='<div class="nomsg"><b>No messages yet.</b><br>Start the conversation with '+esc(t.title)+' below.</div>';
+  const qs=QUICK[role+'|'+t.kind]||[];
+  return '<div class="stack"><div class="note">Demo: nobody replies automatically. Switch between Student, Lecturer and Advisor in the side menu to answer from the other side. The lecturer inbox covers CSC201 and the advisor inbox covers all advisees.</div>'+
+   '<div class="chat '+(S.chatPane==='thread'?'show-thread':'show-list')+'">'+
+    '<div class="tlist" aria-label="Conversations">'+groups+'</div>'+
+    '<section class="conv" aria-label="Conversation with '+esc(t.title)+'">'+
+     '<div class="ch"><button type="button" class="btn small only-m" data-act="chatback" aria-label="Back to conversations">'+ic('back')+'</button><div style="min-width:0"><h2>'+esc(t.title)+'</h2><div class="small muted">'+esc(t.sub)+'</div></div><span class="pill acc" style="margin-left:auto">'+t.kind+'</span></div>'+
+     '<div class="msgs" id="msgs" role="log" aria-live="polite">'+body+'</div>'+
+     '<form class="composer" data-form="chat">'+
+      (qs.length?'<div class="chips" role="group" aria-label="Quick messages">'+qs.map(q=>'<button type="button" data-act="chip" data-q="'+esc(q)+'">'+esc(q)+'</button>').join('')+'</div>':'')+
+      '<div class="row"><textarea id="msg" name="text" rows="2" maxlength="1000" placeholder="Write a message. Enter sends, Shift+Enter adds a line." aria-label="Message to '+esc(t.title)+'"></textarea><button type="submit" class="btn primary">'+ic('send')+' Send</button></div>'+
+     '</form></section></div></div>';
+}
+
+/* ---------- shell ---------- */
+const VIEWS={messages:vMessages,dashboard:vDashboard,courses:vCourses,timetable:vTimetable,registration:vRegistration,fees:vFees,announcements:vAnnouncements,gradebook:vGradebook,announce:vAnnounce};
+function isDark(){return S.theme==='dark'||(S.theme!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
+function applyTheme(){
+  const r=document.documentElement;
+  if(S.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.theme);
+  $('#themeBtn').innerHTML=isDark()?ic('sun')+' Light':ic('moon')+' Dark';
+}
+function render(keepScroll){
+  const staff=S.role==='staff',advisor=S.role==='advisor';
+  const nav=staff?NAV_T:advisor?NAV_A:NAV_S;
+  if(!nav.some(n=>n[0]===S.view))S.view=nav[0][0];
+  const badge=id=>id==='announcements'?(S.role==='student'?unreadCount():0):id==='messages'?chatUnread(S.role):0;
+  $('#nav').innerHTML=nav.map(n=>{const b=badge(n[0]);return '<button type="button" data-act="nav" data-v="'+n[0]+'"'+(S.view===n[0]?' aria-current="page"':'')+'>'+ic(n[2])+'<span>'+n[1]+'</span>'+(b?'<span class="badge" aria-label="'+b+' unread">'+b+'</span>':'')+'</button>'}).join('');
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.role===S.role)));
+  $('#title').textContent=TITLES[S.view];
+  $('#term').textContent=TERM+' · Week '+WEEK+' of 15';
+  $('#user').innerHTML=staff?'<span class="avatar">RN</span><div><b>'+STAFF.name+'</b><span class="muted">Lecturer, '+STAFF.dept+'</span></div>':advisor?'<span class="avatar">GC</span><div><b>'+ADVISOR.name+'</b><span class="muted">'+ADVISOR.title+', '+ADVISOR.dept+'</span></div>':'<span class="avatar">TM</span><div><b>'+STUDENT.name+'</b><span class="muted">'+STUDENT.id+' · '+STUDENT.programme+', Year '+STUDENT.year+'</span></div>';
+  $('#view').innerHTML=VIEWS[S.view]();
+  if(S.view==='gradebook')staffRefresh();
+  if(S.view==='messages'){const m=$('#msgs');if(m)m.scrollTop=m.scrollHeight}
+  applyTheme();
+  try{if(history.replaceState)history.replaceState(null,'','#'+S.view)}catch(e){}
+  if(!keepScroll)window.scrollTo(0,0);
+}
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+const go=(v,keep)=>{S.view=v;render(keep)};
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const a=el.dataset.act;
+  if(a==='nav')go(el.dataset.v);
+  else if(a==='role'){const prev=S.role;S.role=el.dataset.role;S.thread=null;S.chatPane='list';
+    S.view=S.role==='staff'?(prev!=='staff'&&S.view==='messages'?'messages':'gradebook'):S.role==='advisor'?'messages':(S.view==='messages'&&prev!=='student'?'messages':'dashboard');render()}
+  else if(a==='thread'){S.thread=el.dataset.id;S.chatPane='thread';render(true);const t=$('#msg');if(t&&window.matchMedia&&matchMedia('(min-width: 861px)').matches)t.focus()}
+  else if(a==='chatback'){S.chatPane='list';render(true)}
+  else if(a==='chip'){const t=$('#msg');if(t){t.value=QTEXT[el.dataset.q]||el.dataset.q;t.focus();t.setSelectionRange(t.value.length,t.value.length)}}
+  else if(a==='theme'){S.theme=isDark()?'light':'dark';save();applyTheme()}
+  else if(a==='reset'){S=freshState();marks=freshMarks();try{localStorage.removeItem(KEY)}catch(x){}render();toast('Sample data restored')}
+  else if(a==='ttmode'){S.ttMode=el.dataset.m;render(true)}
+  else if(a==='annf'){S.annFilter=el.dataset.f;render(true)}
+  else if(a==='annopen'){const id=el.dataset.id;S.openAnn=S.openAnn===id?null:id;S.read[id]=true;save();render(true)}
+  else if(a==='readall'){allAnn().forEach(x=>S.read[x.id]=true);save();render(true)}
+  else if(a==='reg-add'){const c=CAT.find(x=>x.code===el.dataset.code);
+    const cl=clashes(c,CAT.filter(o=>S.regIds.includes(o.code)));
+    if(cl.length){toast('That clashes with '+cl[0].code);return}
+    S.regIds.push(c.code);S.waitlist=S.waitlist.filter(x=>x!==c.code);save();render(true);toast(c.code+' added')}
+  else if(a==='reg-remove'){S.regIds=S.regIds.filter(x=>x!==el.dataset.code);save();render(true)}
+  else if(a==='reg-wait'){const c=el.dataset.code;S.waitlist=S.waitlist.includes(c)?S.waitlist.filter(x=>x!==c):S.waitlist.concat(c);save();render(true);toast(S.waitlist.includes(c)?'On the waitlist for '+c:'Left the waitlist')}
+  else if(a==='reg-submit'){S.submitted=true;S.regRef='REG-'+String(base.getFullYear()).slice(2)+'-'+String(Math.abs(S.regIds.join('').split('').reduce((h,ch)=>(h*31+ch.charCodeAt(0))|0,7))%10000).padStart(4,'0');save();render(true);toast('Registration submitted')}
+  else if(a==='reg-reopen'){S.submitted=false;save();render(true)}
+  else if(a==='csv'){
+    const text=buildCsv();
+    const fail=()=>{S.csv=text;$('#csvarea').innerHTML=csvBox();const ta=$('#csvta');if(ta){ta.focus();ta.select()}};
+    try{navigator.clipboard.writeText(text).then(()=>{S.csv='';$('#csvarea').innerHTML='';toast('CSV copied')},fail)}catch(x){fail()}
+  }
+});
+document.addEventListener('change',e=>{
+  const el=e.target.closest('[data-act]');if(!el)return;
+  const a=el.dataset.act;
+  if(a==='done'){S.done[el.dataset.key]=el.checked;save();render(true)}
+  else if(a==='target'){S.target[el.dataset.code]=el.value;save();render(true)}
+  else if(a==='staffcourse'){S.staffCourse=el.value;S.csv='';render(true)}
+});
+document.addEventListener('input',e=>{
+  const el=e.target;if(!el.hasAttribute||!el.hasAttribute('data-mark'))return;
+  const c=CUR.find(x=>x.code===S.staffCourse),i=+el.dataset.s,j=+el.dataset.j,max=c.as[j].max;
+  if(el.value===''){marks[c.code][i][j]=null;el.setAttribute('aria-invalid','false')}
+  else{
+    const v=parseFloat(el.value);
+    if(isNaN(v)||v<0||v>max){el.setAttribute('aria-invalid','true');toast('Marks for '+c.as[j].n+' must be between 0 and '+max);return}
+    el.setAttribute('aria-invalid','false');marks[c.code][i][j]=v;
+  }
+  save();staffRefresh();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&e.target&&e.target.id==='msg'){
+    e.preventDefault();
+    const f=e.target.form;if(f)f.requestSubmit?f.requestSubmit():f.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+  }
+});
+document.addEventListener('submit',e=>{
+  const f=e.target.closest('form[data-form]');if(!f)return;
+  e.preventDefault();
+  const d=new FormData(f);
+  if(f.dataset.form==='chat'){
+    const text=String(d.get('text')||'').trim();
+    if(!text){toast('Write a message first');return}
+    const id=S.thread;if(!id)return;
+    (S.chat[id]=S.chat[id]||[]).push({w:S.role,at:Date.now(),text:text.slice(0,1000)});
+    S.seen[seenKey(S.role,id)]=S.chat[id].length;
+    save();render(true);
+    const t=$('#msg');if(t&&window.matchMedia&&matchMedia('(min-width: 861px)').matches)t.focus();
+    return;
+  }
+  if(f.dataset.form==='pay'){
+    const amt=parseFloat(d.get('amount')),p=paid(),room=TOTAL-p.ver-p.pend;
+    if(!(amt>0)){toast('Enter an amount above zero');return}
+    if(amt>room+0.001){toast('That is more than the '+money(room)+' still unpaid');return}
+    S.payments.push({id:Date.now(),date:0,amount:Math.round(amt*100)/100,method:String(d.get('method')),ref:String(d.get('ref')||'').trim(),status:'Pending'});
+    save();render(true);toast('Added as pending');
+  }else if(f.dataset.form==='post'){
+    const t=String(d.get('title')).trim(),b=String(d.get('body')).trim();
+    if(!t||!b){toast('Add a title and a message');return}
+    const aud=String(d.get('aud'));
+    S.posted.unshift({id:'p'+Date.now(),cat:String(d.get('cat')),pin:false,from:STAFF.name,day:0,unread:true,t:t,b:b,aud:aud?aud+' class':''});
+    save();render(true);toast('Posted. Students can see it now');
+  }
+});
+if(window.matchMedia){try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}}
+
+render(true);
+})();
+</script>
+
+</body></html>
