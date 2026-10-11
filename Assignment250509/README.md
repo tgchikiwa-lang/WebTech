@@ -35,9 +35,9 @@ Create at least three meaningful incremental commits, for example:
 
 ## Responsive Notes
 
-- Tailwind CSS is loaded from its CDN, and utility classes provide the page styling without a separate stylesheet.
-- The layout uses a mobile-first approach: navigation links and contact fields stack on narrow screens, then become horizontal navigation and a two-column form at the `sm` and `md` breakpoints.
-- The profile and skills sections sit side by side at medium screen widths and above; the contact section spans both columns.
-- Responsive padding and heading sizes improve spacing and readability on small and larger screens.
-- Navigation links, form controls, and the submit button include visible keyboard-focus styles.
+- Tested breakpoints: 375px (mobile), 768px (tablet), and 1280px (desktop), using the browser device toolbar to check spacing, wrapping, and overflow.
+- Flexbox is used for the top navigation so the links wrap cleanly on small screens but stay centred and aligned on larger screens. This makes the header responsive without forcing horizontal scrolling.
+- CSS Grid is used for the page layout and the contact form: the main sections become a balanced two-column layout at medium widths, and the contact block stretches across both columns at larger sizes. The grid uses responsive columns to keep the content readable at every breakpoint.
+- Tailwind utility classes are used for the main header, navigation buttons, and contact form. The custom CSS file adds the page-level structure, spacing rules, and the hand-written media query for tablet and desktop adjustments.
+- The page remains mobile-first: the base styles stack content vertically, then scale up with `sm:` and `md:` utilities and custom media queries for larger screens.
 
