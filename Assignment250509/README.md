@@ -11,10 +11,10 @@ A semantic HTML5 profile and mini-portfolio page created for the Web Technologie
 
 
 Peer review issue:
->The navigation buttons (â€œAbout,â€ â€œSkills,â€ and â€œContactâ€) at the top of the page are hard to read because the text color and the dark blue background have low contrast. This makes it difficult for people to see the links clearly.
+>The navigation buttons ("About," "Skills," and "Contact") at the top of the page are hard to read because the text color and the dark blue background have low contrast. This makes it difficult for people to see the links clearly.
 
 Fix applied:
-> I changed the button style to use a white background and dark blue text. This increases the contrast and makes the buttons easier to see and click. I also added a hover effect so the color changes slightly when the mouse moves over a button.
+> I changed the button style to use a white background and dark blue text. This increases the contrast and makes the links easier to see and click. I also added a hover effect so the color changes slightly when the mouse moves over a link.
 
 ## Version-control evidence
 
@@ -33,6 +33,11 @@ Create at least three meaningful incremental commits, for example:
         Adjusted heading levels to follow a clear structure (h1, h2, h3).
         Added hover effects for better usability.
 
+## Responsive Notes
 
-
+- Tailwind CSS is loaded from its CDN, and utility classes provide the page styling without a separate stylesheet.
+- The layout uses a mobile-first approach: navigation links and contact fields stack on narrow screens, then become horizontal navigation and a two-column form at the `sm` and `md` breakpoints.
+- The profile and skills sections sit side by side at medium screen widths and above; the contact section spans both columns.
+- Responsive padding and heading sizes improve spacing and readability on small and larger screens.
+- Navigation links, form controls, and the submit button include visible keyboard-focus styles.
 
